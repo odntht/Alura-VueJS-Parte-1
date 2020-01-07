@@ -48,11 +48,13 @@ export default {
   box-shadow: 5px 5px 5px;
 }
 
-.painel-fade-enter, .painel-fade-leave-active {
+.painel-fade-enter,
+.painel-fade-leave-active {
   opacity: 0;
 }
 
-.painel-fade-enter-actitve, .painel-fade-leave-active {
-  transition:opacity .4s;
+.painel-fade-enter-actitve,
+.painel-fade-leave-active {
+  transition: opacity 0.4s;
 }
 </style>

@@ -1,85 +1,45 @@
 <template>
   <div class="corpo">
-    <h1 class="centralizado">{{ titulo }}</h1>
-
-    <input type="search" class="filtro" @input="filtro = $event.target.value" placeholder="filtre por parte do título">
-
-    <!-- {{ filtro }} -->
-    
-   <ul class="lista-fotos">
-      <li class="lista-fotos-item" v-for="foto of fotosComFiltro">
-
-        <meu-painel :titulo="foto.titulo">
-            <imagem-responsiva :url="foto.url" :titulo="foto.titulo"/>
-        </meu-painel>
-
-      </li>
-    </ul>
+    <meu-menu :rotas="routes" />
+    <!-- Hora exibe um componente e outra hora outro. -->
+    <transition name="pagina">
+      <router-view></router-view>
+    </transition>
   </div>
 </template>
 
 <script>
-import Painel from "./components/shared/painel/Painel.vue";
-import ImagemResponsiva from "./components/shared/imagem-responsiva/ImagemResponsiva.vue";
+import { routes } from "./routes";
+import Menu from "./components/shared/menu/Menu.vue";
 
 export default {
   components: {
-    "meu-painel": Painel,
-    "imagem-responsiva": ImagemResponsiva
+    "meu-menu": Menu
   },
 
   data() {
     return {
-      titulo: "Alurapic",
-      fotos: [],
-      filtro: ""
+      // Equivale a routes:routes
+      routes
     };
-  },
-
-  computed: {
-    fotosComFiltro() {
-      if (this.filtro) {
-        /*Filtrar*/
-        let exp = new RegExp(this.filtro.trim(), "i"); /* Salva no exp o valor digitado no fitro */
-        return this.fotos.filter(foto => exp.test(foto.titulo));
-      } else {
-        return this.fotos;
-      }
-    }
-  },
-
-  created() {
-    this.$http
-      .get("http://localhost:3000/v1/fotos") //Faz a requisição GET
-      .then(res => res.json()) //Quando a requisição retorna, salva esse resultado em 'res' e converte para json através do 'res.json()'
-      .then(fotos => (this.fotos = fotos), err => console.log(err));
-    //Quando a res.json() retorna, a resposta dela é definida como a 'fotos' e salva no objeto através de 'this.fotos'
-    // E caso não receba retorno, é apresentado um erro no console através do 'console.log(err)'
   }
 };
 </script>
 
 <style>
-.titulo {
-  text-align: center;
-}
-
 .corpo {
   font-family: Helvetica, sans-serif;
   margin: 0 auto;
   width: 96%;
 }
 
-.lista-fotos {
-  list-style: none;
+.pagina-fade,
+.pagina-leave-active {
+  opacity: 0;
 }
 
-.lista-fotos .lista-fotos-item {
-  display: inline-block;
-}
-
-.filtro {
-  display: block;
-  width: 100%;
+.pagina-enter-actitve,
+.pagina-leave-active {
+  transition: opacity 0.4s;
 }
 </style>
